@@ -1,0 +1,5 @@
+[package]
+org = "dsa612s"
+name = "order_service"
+version = "1.0.0"
+distribution = "2201.13.6"

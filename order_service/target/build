@@ -1,0 +1,51 @@
+{
+  "last_build_time": 1790557927567,
+  "last_update_time": 1790557927567,
+  "last_bal_toml_update_time": 1790557756000,
+  "distribution_version": "2201.13.6",
+  "last_modified_time": {
+    "order_service": 1790557756000
+  },
+  "last_build_options": {
+    "compilationOptions": {
+      "dumpBir": false,
+      "dumpGraph": false,
+      "dumpRawGraphs": false
+    }
+  },
+  "src_meta_info": [
+    {
+      "file": "C:\\Users\\mikao\\Desktop\\mlem\\DSA-Assignment-2\\order_service\\Ballerina.toml",
+      "hash": "56053c6c69cf44a2616ab0687396f0d6cb06bf42c1bf170c68f761ca01431f2d",
+      "size": 94,
+      "lastModifiedTime": 1790557756000
+    },
+    {
+      "file": "C:\\Users\\mikao\\Desktop\\mlem\\DSA-Assignment-2\\order_service\\server.bal",
+      "hash": "fcbb74e56ce8b06c5bebe2ffff17863309007d2c43b36d63bed3db74a09a1205",
+      "size": 82,
+      "lastModifiedTime": 1790557756000
+    }
+  ],
+  "target_exec_meta_info": {
+    "file": "C:\\Users\\mikao\\Desktop\\mlem\\DSA-Assignment-2\\order_service\\target\\backup\\bin\\order_service.jar",
+    "hash": "41dedf9db768365821e50404b98c1962d3896b359518dd75844bce2925a891af",
+    "size": 10438036,
+    "lastModifiedTime": 1790557927945
+  },
+  "settings_meta_info": {
+    "file": "C:\\Users\\mikao\\.ballerina\\Settings.toml",
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "lastModifiedTime": 1790556125354
+  },
+  "ballerina_toml_meta_info": {
+    "file": "C:\\Users\\mikao\\Desktop\\mlem\\DSA-Assignment-2\\order_service\\Ballerina.toml",
+    "hash": "56053c6c69cf44a2616ab0687396f0d6cb06bf42c1bf170c68f761ca01431f2d",
+    "size": 94,
+    "lastModifiedTime": 1790557756000
+  },
+  "imports": [
+    "ballerina/io"
+  ]
+}
