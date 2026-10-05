@@ -1,0 +1,188 @@
+services:
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENERS: INTERNAL://:19092,EXTERNAL://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:19092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:19092 > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    networks: [fd-net]
+
+  kafka-init:
+    image: apache/kafka:3.8.0
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        for t in orders.created restaurant.accepted restaurant.rejected payments.completed payments.failed orders.confirmed kitchen.preparing kitchen.ready orders.preparing orders.ready delivery.assigned delivery.pickedup delivery.completed orders.out_for_delivery orders.delivered orders.cancelled; do
+          /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:19092 --create --if-not-exists --topic $$t --partitions 3 --replication-factor 1
+        done
+    networks: [fd-net]
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [fd-net]
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "18090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:19092
+    depends_on: [kafka]
+    networks: [fd-net]
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - "18080:8080"
+    environment:
+      BAL_CONFIG_VAR_KAFKABROKER: kafka:19092
+      BAL_CONFIG_VAR_DBHOST: postgres
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks: [fd-net]
+  customer-service:
+    build: ./customer-service
+    container_name: customer-service
+    ports:
+      - "18081:8081"
+    environment:
+      BAL_CONFIG_VAR_KAFKABROKER: kafka:19092
+      BAL_CONFIG_VAR_DBHOST: postgres
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks: [fd-net]
+  restaurant-service:
+    build: ./restaurant-service
+    container_name: restaurant-service
+    ports:
+      - "18082:8082"
+    environment:
+      BAL_CONFIG_VAR_KAFKABROKER: kafka:19092
+      BAL_CONFIG_VAR_DBHOST: postgres
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks: [fd-net]
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    ports:
+      - "18083:8083"
+    environment:
+      BAL_CONFIG_VAR_KAFKABROKER: kafka:19092
+      BAL_CONFIG_VAR_DBHOST: postgres
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks: [fd-net]
+  delivery-service:
+    build: ./delivery-service
+    container_name: delivery-service
+    ports:
+      - "18084:8084"
+    environment:
+      BAL_CONFIG_VAR_KAFKABROKER: kafka:19092
+      BAL_CONFIG_VAR_DBHOST: postgres
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks: [fd-net]
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    ports:
+      - "18085:8085"
+    environment:
+      BAL_CONFIG_VAR_KAFKABROKER: kafka:19092
+      BAL_CONFIG_VAR_DBHOST: postgres
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks: [fd-net]
+  admin-service:
+    build: ./admin-service
+    container_name: admin-service
+    ports:
+      - "18086:8086"
+    environment:
+      BAL_CONFIG_VAR_KAFKABROKER: kafka:19092
+      BAL_CONFIG_VAR_DBHOST: postgres
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks: [fd-net]
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks: [fd-net]
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on: [prometheus]
+    networks: [fd-net]
+volumes:
+  pg-data:
+
+networks:
+  fd-net:
