@@ -1,0 +1,11 @@
+FROM ballerina/ballerina:2201.10.0 AS build
+WORKDIR /app
+COPY . .
+USER root
+RUN bal build
+
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/target/bin/delivery_service.jar app.jar
+EXPOSE 8084
+CMD ["java", "-jar", "app.jar"]
