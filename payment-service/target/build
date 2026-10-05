@@ -1,0 +1,73 @@
+{
+  "last_build_time": 1791225082179,
+  "last_update_time": 1791225082179,
+  "last_bal_toml_update_time": 1791225012099,
+  "distribution_version": "2201.13.5",
+  "last_modified_time": {
+    "admin_service": 1791225012099
+  },
+  "last_build_options": {
+    "compilationOptions": {
+      "observabilityIncluded": true,
+      "dumpBir": false,
+      "cloud": "",
+      "dumpGraph": false,
+      "dumpRawGraphs": false
+    }
+  },
+  "src_meta_info": [
+    {
+      "file": "C:\\Users\\reggy\\Documents\\food-delivery\\admin-service\\Ballerina.toml",
+      "hash": "10e44b2618dcdba7ca49bb7d09faae0f1c61426e43c224208ff687f0cf40923b",
+      "size": 117,
+      "lastModifiedTime": 1791225012099
+    },
+    {
+      "file": "C:\\Users\\reggy\\Documents\\food-delivery\\admin-service\\common.bal",
+      "hash": "4c9ac890b76c6b03241e6fd01464616d97eb9b227c30c3ae97bd64ccb18de372",
+      "size": 3684,
+      "lastModifiedTime": 1790587300287
+    },
+    {
+      "file": "C:\\Users\\reggy\\Documents\\food-delivery\\admin-service\\main.bal",
+      "hash": "1660cc5f1420c43f91d3d81f4e38bf361be676584e02facc5183bcf36d916594",
+      "size": 4624,
+      "lastModifiedTime": 1790587300291
+    },
+    {
+      "file": "C:\\Users\\reggy\\Documents\\food-delivery\\admin-service\\observability.bal",
+      "hash": "b70b3e30da6e9c20ceadc7977eba1035145af0c4024cb23b6a6609c2d1359365",
+      "size": 36,
+      "lastModifiedTime": 1791208238309
+    }
+  ],
+  "target_exec_meta_info": {
+    "file": "C:\\Users\\reggy\\Documents\\food-delivery\\admin-service\\target\\backup\\bin\\admin_service.jar",
+    "hash": "04b31e8291aa3e1aaae841e58c0cfc2f6d9e691411903d1576aa4132413be528",
+    "size": 91246643,
+    "lastModifiedTime": 1791225084849
+  },
+  "settings_meta_info": {
+    "file": "C:\\Users\\reggy\\.ballerina\\Settings.toml",
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "lastModifiedTime": 1787196057368
+  },
+  "ballerina_toml_meta_info": {
+    "file": "C:\\Users\\reggy\\Documents\\food-delivery\\admin-service\\Ballerina.toml",
+    "hash": "10e44b2618dcdba7ca49bb7d09faae0f1c61426e43c224208ff687f0cf40923b",
+    "size": 117,
+    "lastModifiedTime": 1791225012099
+  },
+  "imports": [
+    "ballerina/log",
+    "ballerina/time",
+    "ballerina/uuid",
+    "ballerinax/postgresql",
+    "ballerinax/postgresql.driver",
+    "ballerina/http",
+    "ballerina/sql",
+    "ballerinax/kafka",
+    "ballerinax/prometheus"
+  ]
+}
